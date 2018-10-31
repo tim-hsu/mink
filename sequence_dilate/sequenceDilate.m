@@ -1,6 +1,9 @@
 function dilated_field = sequenceDilate(label_field)
+%% Modified from original code by William Epting (National Energy Technology Laboratory)
+
+
 %% Parameters
-R = 2; % desired radius of dilating kernel
+r = 2; % radius of dilating kernel
 
 
 %% Set Up
@@ -14,16 +17,15 @@ ph1 = uint8(ph1);
 ph2 = uint8(ph2);
 ph3 = uint8(ph3);
 
-ph1(label_field == 1) = 1;
-ph2(label_field == 2) = 1;
-ph3(label_field == 3) = 1;
+ph1(label_field==1) = 1;
+ph2(label_field==2) = 1;
+ph3(label_field==3) = 1;
 
-SE = strel('sphere',R); % Spherical kernel for dilation
+se = strel('sphere', r);
 
 
 %% Dilate phase 3, erode 1 and 2
-% same procedure
-ph3 = imdilate(ph3,SE);
+ph3 = imdilate(ph3, se);
 
 % erode overlaps
 ph1 = ph1 - ph3;
@@ -35,20 +37,19 @@ ph2(ph2<0) = 0;
 
 
 %% Dilate phase 1, erode 2 and 3
-ph1 = imdilate(ph1,SE);
-% now there are places where ph1 has expanded into ph2 or ph3. We don't want
-% overlap, so we will use ph0 to erode any overlapping voxels of ph1 or ph2.
+ph1 = imdilate(ph1, se);
+
+% erode overlaps
 ph2 = ph2 - ph1;
 ph3 = ph3 - ph1;
-% oroblem: Now there are places with -1 value.
+
 % set all negative values back to 0
 ph2(ph2<0) = 0;
 ph3(ph3<0) = 0;
 
 
 %% Dilate phase 2, erode 1 and 3
-% same procedure
-ph2 = imdilate(ph2,SE);
+ph2 = imdilate(ph2, se);
 
 % erode overlaps
 ph1 = ph1 - ph2;

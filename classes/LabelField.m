@@ -16,13 +16,12 @@ classdef LabelField < handle
 
         
         function obj = getTPBs(obj)
-%             disp('Finding TPB voxels...');
             X = obj.dimensionVoxels(1);
             Y = obj.dimensionVoxels(2);
             Z = obj.dimensionVoxels(3);
             obj.fieldTPB = zeros(X,Y,Z);
             
-            thisField = obj.field;
+            thisField    = obj.field;
             thisFieldTPB = obj.fieldTPB;
             
             parfor z = 1:Z
@@ -87,51 +86,6 @@ classdef LabelField < handle
             
             obj.fieldTPB = obj.field;
             obj.fieldTPB(thisFieldTPB==4) = 4;
-            
-%             for y = 1:Y
-%                 for x = 1:X-1
-%                     for z = 1:Z-1
-%                         val1 = obj.field(x  ,y,z  );
-%                         val2 = obj.field(x+1,y,z  );
-%                         val3 = obj.field(x  ,y,z+1);
-%                         val4 = obj.field(x+1,y,z+1);
-%                         if all(ismember([1 2 3],[val1 val2 val3 val4]))
-%                             obj.fieldTPB(x  ,y,z  ) = 4;
-%                             obj.fieldTPB(x+1,y,z  ) = 4;
-%                             obj.fieldTPB(x  ,y,z+1) = 4;
-%                             obj.fieldTPB(x+1,y,z+1) = 4;
-%                         end
-%                     end
-%                 end
-%             end
-%             
-%             for x = 1:X
-%                 for y = 1:Y-1
-%                     for z = 1:Z-1
-%                         val1 = obj.field(x,y  ,z  );
-%                         val2 = obj.field(x,y+1,z  );
-%                         val3 = obj.field(x,y  ,z+1);
-%                         val4 = obj.field(x,y+1,z+1);
-%                         if all(ismember([1 2 3],[val1 val2 val3 val4]))
-%                             obj.fieldTPB(x,y  ,z  ) = 4;
-%                             obj.fieldTPB(x,y+1,z  ) = 4;
-%                             obj.fieldTPB(x,y  ,z+1) = 4;
-%                             obj.fieldTPB(x,y+1,z+1) = 4;
-%                         end
-%                     end
-%                 end
-%             end 
-            
-%             for x = 1:X
-%                 for y = 1:Y
-%                     for z = 1:Z
-%                         if obj.fieldTPB(x,y,z) ~= 4
-%                             obj.fieldTPB(x,y,z) = obj.field(x,y,z);
-%                         end
-%                     end
-%                 end
-%             end
-            
             obj.fieldTPB = uint8(obj.fieldTPB);
 %             disp('TPB voxels labeling Done!');
         end
